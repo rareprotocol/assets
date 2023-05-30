@@ -1,0 +1,4 @@
+openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/
+openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/
+rareprotocol/aux/=lib/aux/src/
+royalty-guard/=lib/royalty-guard/src/royalty-guard

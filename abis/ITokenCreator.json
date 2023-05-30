@@ -1,0 +1,235 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "tokenCreator",
+      "outputs": [
+        {
+          "internalType": "address payable",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "tokenCreator(uint256)": "40c1a064"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_tokenId\",\"type\":\"uint256\"}],\"name\":\"tokenCreator\",\"outputs\":[{\"internalType\":\"address payable\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/token/extensions/ITokenCreator.sol\":\"ITokenCreator\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":aux/=lib/aux/\",\":ds-test/=lib/ds-test/src/\",\":erc4626-tests/=lib/aux/lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/\",\":forge-std/=lib/forge-std/src/\",\":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/\",\":openzeppelin/=lib/aux/lib/openzeppelin-contracts-upgradeable/contracts/\",\":rareprotocol/aux/=lib/aux/src/\",\":royalty-guard/=lib/royalty-guard/src/royalty-guard/\",\":solmate/=lib/royalty-guard/lib/solmate/src/\"]},\"sources\":{\"src/token/extensions/ITokenCreator.sol\":{\"keccak256\":\"0xebb99f216573c38f201c0cd99bbe98cce87a04acc129b37b487e66ec148de5f6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b101c0be9c38496d0bee068af7ca3519d3879c35315d6336e2dbc9a36ab1ae42\",\"dweb:/ipfs/QmZQuVdfHHw1FuX4tc867KedVdnJDJ8Kth9BPKUiuajBoF\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.15+commit.e14f2714"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_tokenId",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "tokenCreator",
+          "outputs": [
+            {
+              "internalType": "address payable",
+              "name": "",
+              "type": "address"
+            }
+          ]
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":aux/=lib/aux/",
+        ":ds-test/=lib/ds-test/src/",
+        ":erc4626-tests/=lib/aux/lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/",
+        ":forge-std/=lib/forge-std/src/",
+        ":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        ":openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/",
+        ":openzeppelin/=lib/aux/lib/openzeppelin-contracts-upgradeable/contracts/",
+        ":rareprotocol/aux/=lib/aux/src/",
+        ":royalty-guard/=lib/royalty-guard/src/royalty-guard/",
+        ":solmate/=lib/royalty-guard/lib/solmate/src/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/token/extensions/ITokenCreator.sol": "ITokenCreator"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "src/token/extensions/ITokenCreator.sol": {
+        "keccak256": "0xebb99f216573c38f201c0cd99bbe98cce87a04acc129b37b487e66ec148de5f6",
+        "urls": [
+          "bzz-raw://b101c0be9c38496d0bee068af7ca3519d3879c35315d6336e2dbc9a36ab1ae42",
+          "dweb:/ipfs/QmZQuVdfHHw1FuX4tc867KedVdnJDJ8Kth9BPKUiuajBoF"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "src/token/extensions/ITokenCreator.sol",
+    "id": 10420,
+    "exportedSymbols": {
+      "ITokenCreator": [10419]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:224:56",
+    "nodes": [
+      {
+        "id": 10411,
+        "nodeType": "PragmaDirective",
+        "src": "32:23:56",
+        "nodes": [],
+        "literals": ["solidity", "^", "0.8", ".0"]
+      },
+      {
+        "id": 10419,
+        "nodeType": "ContractDefinition",
+        "src": "57:198:56",
+        "nodes": [
+          {
+            "id": 10418,
+            "nodeType": "FunctionDefinition",
+            "src": "149:104:56",
+            "nodes": [],
+            "functionSelector": "40c1a064",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "tokenCreator",
+            "nameLocation": "158:12:56",
+            "parameters": {
+              "id": 10414,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 10413,
+                  "mutability": "mutable",
+                  "name": "_tokenId",
+                  "nameLocation": "179:8:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 10418,
+                  "src": "171:16:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 10412,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "171:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "170:18:56"
+            },
+            "returnParameters": {
+              "id": 10417,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 10416,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 10418,
+                  "src": "236:15:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  },
+                  "typeName": {
+                    "id": 10415,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "236:15:56",
+                    "stateMutability": "payable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "235:17:56"
+            },
+            "scope": 10419,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "ITokenCreator",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [10419],
+        "name": "ITokenCreator",
+        "nameLocation": "67:13:56",
+        "scope": 10420,
+        "usedErrors": []
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 56
+}
