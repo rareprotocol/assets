@@ -8,12 +8,11 @@ import "../../../src/token/ERC721/sovereign/SovereignNFTContractFactory.sol";
 contract SovereignNFTFactoryDeploy is Script {
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        address martketplaceSetings = vm.envAddress("MARKETPLACE_SETTINGS");
 
         vm.startBroadcast(deployerPrivateKey);
 
         // Deploy Logic Contracts
-        new SovereignNFTContractFactory(martketplaceSetings);
+        new SovereignNFTContractFactory();
 
         vm.stopBroadcast();
     }

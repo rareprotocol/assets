@@ -4,7 +4,6 @@ pragma solidity 0.8.15;
 
 import "openzeppelin-contracts/access/Ownable.sol";
 import "openzeppelin-contracts/proxy/Clones.sol";
-import "rareprotocol/aux/marketplace/IMarketplaceSettings.sol";
 import "./SovereignNFT.sol";
 import "./extensions/SovereignNFTRoyaltyGuard.sol";
 import "./extensions/SovereignNFTRoyaltyGuardDeadmanTrigger.sol";
@@ -13,7 +12,6 @@ import "./extensions/LazySovereignNFTRoyaltyGuard.sol";
 import "./extensions/LazySovereignNFTRoyaltyGuardDeadmanTrigger.sol";
 
 contract SovereignNFTContractFactory is Ownable {
-    IMarketplaceSettings public marketplaceSettings;
 
     bytes32 public constant SOVEREIGN_NFT = keccak256("SOVEREIGN_NFT");
     bytes32 public constant ROYALTY_GUARD = keccak256("ROYALTY_GUARD");
@@ -40,14 +38,7 @@ contract SovereignNFTContractFactory is Ownable {
         bytes32 indexed contractType
     );
 
-    constructor(address _marketplaceSettings) {
-        require(
-            _marketplaceSettings != address(0),
-            "constructor::_marketplaceSettings cannot be zero address."
-        );
-
-        marketplaceSettings = IMarketplaceSettings(_marketplaceSettings);
-
+    constructor() {
         SovereignNFT sovNFT = new SovereignNFT();
         sovereignNFT = address(sovNFT);
 
@@ -65,14 +56,6 @@ contract SovereignNFTContractFactory is Ownable {
 
         LazySovereignNFTRoyaltyGuardDeadmanTrigger lsovNFTRGDT = new LazySovereignNFTRoyaltyGuardDeadmanTrigger();
         lazySovereignNFTRoyaltyGuardDeadmanTrigger = address(lsovNFTRGDT);
-    }
-
-    function setMarketplaceSettings(address _marketplaceSettings)
-        external
-        onlyOwner
-    {
-        require(_marketplaceSettings != address(0));
-        marketplaceSettings = IMarketplaceSettings(_marketplaceSettings);
     }
 
     function setSovereignNFT(address _sovereignNFT) external onlyOwner {
@@ -126,10 +109,6 @@ contract SovereignNFTContractFactory is Ownable {
 
         emit SovereignNFTContractCreated(sovAddr, msg.sender);
 
-        marketplaceSettings.setERC721ContractPrimarySaleFeePercentage(
-            sovAddr,
-            15
-        );
 
         return address(sovereignNFT);
     }
@@ -147,11 +126,6 @@ contract SovereignNFTContractFactory is Ownable {
         );
 
         emit SovereignNFTContractCreated(sovAddr, msg.sender);
-
-        marketplaceSettings.setERC721ContractPrimarySaleFeePercentage(
-            sovAddr,
-            15
-        );
 
         return address(sovereignNFT);
     }
@@ -217,11 +191,6 @@ contract SovereignNFTContractFactory is Ownable {
             "createSovereignNFTContract::_contractType unsupported contract type."
         );
         emit SovereignNFTContractCreated(sovAddr, msg.sender);
-
-        marketplaceSettings.setERC721ContractPrimarySaleFeePercentage(
-            sovAddr,
-            15
-        );
 
         return address(sovAddr);
     }
