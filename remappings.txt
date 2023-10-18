@@ -2,3 +2,4 @@ openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contr
 openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/
 rareprotocol/aux/=lib/aux/src/
 royalty-guard/=lib/royalty-guard/src/royalty-guard
+forge-std/=lib/forge-std/src/

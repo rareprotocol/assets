@@ -12,11 +12,11 @@ import "../../extensions/ITokenCreator.sol";
 import "../../extensions/ERC2981Upgradeable.sol";
 
 /**
- * @title SovereignNFT
- * @dev This contract implements an ERC721 compliant NFT (Non-Fungible Token) with additional features.
+ * @title LazySovereignNFT
+ * @dev This contract implements an ERC721 compliant NFT (Non-Fungible Token) with lazy minting.
  */
 
-contract SovereignNFT is
+contract LazySovereignNFT is
     OwnableUpgradeable,
     ERC165Upgradeable,
     ERC721Upgradeable,
@@ -28,16 +28,30 @@ contract SovereignNFT is
     using StringsUpgradeable for uint256;
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
+    /////////////////////////////////////////////////////////////////////////////
+    // Structs
+    /////////////////////////////////////////////////////////////////////////////
     struct MintConfig {
         uint256 numberOfTokens;
         string baseURI;
         bool lockedMetadata;
     }
 
+    /////////////////////////////////////////////////////////////////////////////
+    // Storage
+    /////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////
+    // Public
+    //////////////////////////////////////////////
+    // Disabled flag
     bool public disabled;
 
+    // Maximum number of tokens that can be minted
     uint256 public maxTokens;
 
+    //////////////////////////////////////////////
+    // Private
+    //////////////////////////////////////////////
     // Mapping from token ID to approved address
     mapping(uint256 => address) private tokenApprovals;
 
@@ -50,17 +64,30 @@ contract SovereignNFT is
     // Mint batches for batch minting
     MintConfig private mintConfig;
 
-    // Optional mapping for token URIs
-    mapping(uint256 => string) private _tokenURIs;
-
+    /////////////////////////////////////////////////////////////////////////////
+    // Events
+    /////////////////////////////////////////////////////////////////////////////
+    // Emits when the contract is disabled.
     event ContractDisabled(address indexed user);
 
+    // Emits when prepared for minting.
     event PrepareMint(uint256 indexed numberOfTokens, string baseURI);
+
+    // Emits when metadata is locked.
     event MetadataLocked(string baseURI);
+
+    // Emits when metadata is updated.
     event MetadataUpdated(string baseURI);
 
+    /////////////////////////////////////////////////////////////////////////////
+    // Init
+    /////////////////////////////////////////////////////////////////////////////
     /**
      * @dev Contract initialization function.
+     * @param _name The name of the NFT contract.
+     * @param _symbol The symbol of the NFT contract.
+     * @param _creator The address of the contract creator.
+     * @param _maxTokens The maximum number of tokens that can be minted.
      */
     function init(
         string calldata _name,
@@ -82,14 +109,11 @@ contract SovereignNFT is
 
         super.transferOwnership(_creator);
     }
- /**
-     * @dev Modifier to check if the caller is the owner of a specific token.
-     */
-    modifier onlyTokenOwner(uint256 _tokenId) {
-        require(ownerOf(_tokenId) == msg.sender, "Must be owner of token.");
-        _;
-    }
- /**
+
+    /////////////////////////////////////////////////////////////////////////////
+    // Modifiers
+    /////////////////////////////////////////////////////////////////////////////
+    /**
      * @dev Modifier to check if the contract is not disabled.
      */
     modifier ifNotDisabled() {
@@ -97,8 +121,13 @@ contract SovereignNFT is
         _;
     }
 
+    /////////////////////////////////////////////////////////////////////////////
+    // Write Functions
+    /////////////////////////////////////////////////////////////////////////////
     /**
      * @dev Prepare a minting batch with a specified base URI and number of tokens.
+     * @param _baseURI The base URI for token metadata.
+     * @param _numberOfTokens The number of tokens to prepare for minting.
      */
     function prepareMint(
         string calldata _baseURI,
@@ -106,8 +135,12 @@ contract SovereignNFT is
     ) public onlyOwner ifNotDisabled {
         _prepareMint(_baseURI, _numberOfTokens);
     }
+
     /**
-     * @dev Prepare a minting batch with a specified base URI and number of tokens.
+     * @dev Prepare a minting batch with a specified base URI and number of tokens, and assign a minter address.
+     * @param _baseURI The base URI for token metadata.
+     * @param _numberOfTokens The number of tokens to prepare for minting.
+     * @param _minter The address of the minter.
      */
     function prepareMintWithMinter(
         string calldata _baseURI,
@@ -118,10 +151,14 @@ contract SovereignNFT is
         minterAddresses[_minter] = true;
     }
 
-    function mint(address _receiver) external ifNotDisabled {
+    /**
+     * @dev Mint a new token to the specified receiver.
+     * @param _receiver The address of the token receiver.
+     */
+    function mintTo(address _receiver) external ifNotDisabled {
         require(
             msg.sender == owner() || minterAddresses[msg.sender],
-            "lazyMint::only owner can mint"
+            "lazyMint::only owner or approved minter can mint"
         );
         _createToken(
             _receiver,
@@ -130,25 +167,39 @@ contract SovereignNFT is
         );
     }
 
-    function deleteToken(uint256 _tokenId) public onlyTokenOwner(_tokenId) {
+    /**
+     * @dev Delete a token with the given ID.
+     * @param _tokenId The ID of the token to delete.
+     */
+    function deleteToken(uint256 _tokenId) public {
+        require(
+            ownerOf(_tokenId) == msg.sender,
+            "Must be the owner of the token."
+        );
         burn(_tokenId);
     }
 
-    function tokenCreator(
-        uint256
-    ) public view override returns (address payable) {
-        return payable(owner());
-    }
-
+    /**
+     * @dev Disable the contract, preventing further minting.
+     */
     function disableContract() public onlyOwner {
         disabled = true;
         emit ContractDisabled(msg.sender);
     }
 
+    /**
+     * @dev Set the default royalty receiver address.
+     * @param _receiver The address of the default royalty receiver.
+     */
     function setDefaultRoyaltyReceiver(address _receiver) external onlyOwner {
         _setDefaultRoyaltyReceiver(_receiver);
     }
 
+    /**
+     * @dev Set a specific royalty receiver address for a token.
+     * @param _receiver The address of the royalty receiver.
+     * @param _tokenId The ID of the token.
+     */
     function setRoyaltyReceiverForToken(
         address _receiver,
         uint256 _tokenId
@@ -156,61 +207,47 @@ contract SovereignNFT is
         royaltyReceivers[_tokenId] = _receiver;
     }
 
-    function _createToken(
-        address _to,
-        uint256 _royaltyPercentage,
-        address _royaltyReceiver
-    ) internal returns (uint256) {
-        tokenIdCounter.increment();
-        uint256 tokenId = tokenIdCounter.current();
-        require(tokenId <= maxTokens, "_createToken::exceeded maxTokens");
-        _safeMint(_to, tokenId);
-        _setRoyaltyPercentage(tokenId, _royaltyPercentage);
-        _setRoyaltyReceiver(tokenId, _royaltyReceiver);
-        return tokenId;
-    }
-
     /**
-     * @dev Prepare a minting batch with a specified base URI and number of tokens.
+     * @dev Update the base URI.
+     * @param _baseURI The new base URI.
      */
-    function _prepareMint(
-        string calldata _baseURI,
-        uint256 _numberOfTokens
-    ) internal  {
-        require(
-            _numberOfTokens <= maxTokens,
-            "_prepareMint::exceeded maxTokens"
-        );
-        require(
-            tokenIdCounter.current() == 0,
-            "_prepareMint::can only prepare mint with 0 tokens"
-        );
-        mintConfig = MintConfig(_numberOfTokens, _baseURI, false);
-        emit PrepareMint(_numberOfTokens, _baseURI);
-    }
-
-    ///////////////////////////////////////////////
-    // Write Functions
-    ///////////////////////////////////////////////
-    function updateBatchMintBaseURI(
-        uint256 _batchIndex,
-        string calldata _baseURI
-    ) external onlyOwner {
+    function updateBaseURI(string calldata _baseURI) external onlyOwner {
         require(
             !mintConfig.lockedMetadata,
-            "updateBatchMintBaseURI::metadata is locked"
+            "updateBaseURI::metadata is locked"
         );
 
         mintConfig.baseURI = _baseURI;
+        emit MetadataUpdated(_baseURI);
     }
 
-    function lockBatchMintBaseURI() external onlyOwner {
+    /**
+     * @dev Lock the metadata to prevent  further updates.
+     */
+    function lockBaseURI() external onlyOwner {
+        emit MetadataLocked(mintConfig.baseURI);
         mintConfig.lockedMetadata = true;
     }
 
     /////////////////////////////////////////////////////////////////////////////
     // Read Functions
     /////////////////////////////////////////////////////////////////////////////
+    /**
+     * @dev Get the address of the token creator for a given token ID.
+     * @param _tokenId The ID of the token.
+     * @return The address of the token creator.
+     */
+    function tokenCreator(
+        uint256 _tokenId
+    ) public view override returns (address payable) {
+        return payable(owner());
+    }
+
+    /**
+     * @dev Get the current minting configuration.
+     * @return numberOfTokens The number of tokens in the current minting batch.
+     * @return baseURI The base URI for token metadata.
+     */
     function getMintConfig()
         public
         view
@@ -219,9 +256,11 @@ contract SovereignNFT is
         return (mintConfig.numberOfTokens, mintConfig.baseURI);
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-    // Overriding Methods to support mint config
-    /////////////////////////////////////////////////////////////////////////////
+    /**
+     * @dev Get the token URI for a specific token.
+     * @param _tokenId The ID of the token.
+     * @return The token's URI.
+     */
     function tokenURI(
         uint256 _tokenId
     ) public view virtual override returns (string memory) {
@@ -236,6 +275,10 @@ contract SovereignNFT is
             );
     }
 
+    /**
+     * @dev Get the total supply of tokens in existence.
+     * @return The total supply of tokens.
+     */
     function totalSupply() public view virtual returns (uint256) {
         return tokenIdCounter.current();
     }
@@ -257,5 +300,50 @@ contract SovereignNFT is
             ERC165Upgradeable.supportsInterface(interfaceId) ||
             ERC2981Upgradeable.supportsInterface(interfaceId) ||
             ERC721Upgradeable.supportsInterface(interfaceId);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    // Internal Functions
+    /////////////////////////////////////////////////////////////////////////////
+    /**
+     * @dev Create a new token and assign it to the specified recipient.
+     * @param _to The address of the token recipient.
+     * @param _royaltyPercentage The royalty percentage for the token.
+     * @param _royaltyReceiver The address of the royalty receiver for the token.
+     * @return The ID of the newly created token.
+     */
+    function _createToken(
+        address _to,
+        uint256 _royaltyPercentage,
+        address _royaltyReceiver
+    ) internal returns (uint256) {
+        tokenIdCounter.increment();
+        uint256 tokenId = tokenIdCounter.current();
+        require(tokenId <= maxTokens, "_createToken::exceeded maxTokens");
+        _safeMint(_to, tokenId);
+        _setRoyaltyPercentage(tokenId, _royaltyPercentage);
+        _setRoyaltyReceiver(tokenId, _royaltyReceiver);
+        return tokenId;
+    }
+
+    /**
+     * @dev Prepare a minting batch with a specified base URI and number of tokens.
+     * @param _baseURI The base URI for token metadata.
+     * @param _numberOfTokens The number of tokens to prepare for minting.
+     */
+    function _prepareMint(
+        string calldata _baseURI,
+        uint256 _numberOfTokens
+    ) internal {
+        require(
+            _numberOfTokens <= maxTokens,
+            "_prepareMint::exceeded maxTokens"
+        );
+        require(
+            tokenIdCounter.current() == 0,
+            "_prepareMint::can only prepare mint with 0 tokens"
+        );
+        mintConfig = MintConfig(_numberOfTokens, _baseURI, false);
+        emit PrepareMint(_numberOfTokens, _baseURI);
     }
 }
