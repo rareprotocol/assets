@@ -8,8 +8,8 @@ import "openzeppelin-contracts-upgradeable/utils/introspection/ERC165Upgradeable
 import "openzeppelin-contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "openzeppelin-contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "openzeppelin-contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "../../extensions/ITokenCreator.sol";
-import "../../extensions/ERC2981Upgradeable.sol";
+import "../../../extensions/ITokenCreator.sol";
+import "../../../extensions/ERC2981Upgradeable.sol";
 
 /**
  * @title LazySovereignNFT

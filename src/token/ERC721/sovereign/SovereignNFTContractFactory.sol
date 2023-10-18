@@ -7,9 +7,6 @@ import "openzeppelin-contracts/proxy/Clones.sol";
 import "./SovereignNFT.sol";
 import "./extensions/SovereignNFTRoyaltyGuard.sol";
 import "./extensions/SovereignNFTRoyaltyGuardDeadmanTrigger.sol";
-import "./LazySovereignNFT.sol";
-import "./extensions/LazySovereignNFTRoyaltyGuard.sol";
-import "./extensions/LazySovereignNFTRoyaltyGuardDeadmanTrigger.sol";
 
 contract SovereignNFTContractFactory is Ownable {
 
@@ -47,15 +44,6 @@ contract SovereignNFTContractFactory is Ownable {
 
         SovereignNFTRoyaltyGuardDeadmanTrigger sovNFTRGDT = new SovereignNFTRoyaltyGuardDeadmanTrigger();
         sovereignNFTRoyaltyGuardDeadmanTrigger = address(sovNFTRGDT);
-
-        LazySovereignNFT lsovNFT = new LazySovereignNFT();
-        lazySovereignNFT = address(lsovNFT);
-
-        LazySovereignNFTRoyaltyGuard lsovNFTRG = new LazySovereignNFTRoyaltyGuard();
-        lazySovereignNFTRoyaltyGuard = address(lsovNFTRG);
-
-        LazySovereignNFTRoyaltyGuardDeadmanTrigger lsovNFTRGDT = new LazySovereignNFTRoyaltyGuardDeadmanTrigger();
-        lazySovereignNFTRoyaltyGuardDeadmanTrigger = address(lsovNFTRGDT);
     }
 
     function setSovereignNFT(address _sovereignNFT) external onlyOwner {
@@ -80,18 +68,7 @@ contract SovereignNFTContractFactory is Ownable {
             sovereignNFTRoyaltyGuardDeadmanTrigger = _sovereignNFT;
             return;
         }
-        if (_contractType == LAZY_SOVEREIGN_NFT) {
-            lazySovereignNFT = _sovereignNFT;
-            return;
-        }
-        if (_contractType == LAZY_ROYALTY_GUARD) {
-            lazySovereignNFTRoyaltyGuard = _sovereignNFT;
-            return;
-        }
-        if (_contractType == LAZY_ROYALTY_GUARD_DEADMAN) {
-            lazySovereignNFTRoyaltyGuardDeadmanTrigger = _sovereignNFT;
-            return;
-        }
+
         require(false, "setSovereignNFT::Unsupported _contractType.");
     }
 
@@ -164,28 +141,7 @@ contract SovereignNFTContractFactory is Ownable {
                 _maxTokens
             );
         }
-        if (_contractType == LAZY_SOVEREIGN_NFT) {
-            sovAddr = Clones.clone(lazySovereignNFT);
-            LazySovereignNFT(sovAddr).init(_name, _symbol, msg.sender, _maxTokens);
-        }
-        if (_contractType == LAZY_ROYALTY_GUARD) {
-            sovAddr = Clones.clone(lazySovereignNFTRoyaltyGuard);
-            LazySovereignNFTRoyaltyGuard(sovAddr).init(
-                _name,
-                _symbol,
-                msg.sender,
-                _maxTokens
-            );
-        }
-        if (_contractType == LAZY_ROYALTY_GUARD_DEADMAN) {
-            sovAddr = Clones.clone(lazySovereignNFTRoyaltyGuardDeadmanTrigger);
-            LazySovereignNFTRoyaltyGuardDeadmanTrigger(sovAddr).init(
-                _name,
-                _symbol,
-                msg.sender,
-                _maxTokens
-            );
-        }
+
         require(
             sovAddr != address(0),
             "createSovereignNFTContract::_contractType unsupported contract type."
