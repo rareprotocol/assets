@@ -8,7 +8,7 @@ import "./LazySovereignNFT.sol";
 import "./extensions/LazySovereignNFTRoyaltyGuard.sol";
 import "./extensions/LazySovereignNFTRoyaltyGuardDeadmanTrigger.sol";
 
-contract LazySovereignNFTContractFactory is Ownable {
+contract LazySovereignNFTFactory is Ownable {
 
     bytes32 public constant LAZY_SOVEREIGN_NFT = keccak256("LAZY_SOVEREIGN_NFT");
     bytes32 public constant LAZY_ROYALTY_GUARD = keccak256("LAZY_ROYALTY_GUARD");
