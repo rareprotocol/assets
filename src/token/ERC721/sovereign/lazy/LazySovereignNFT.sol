@@ -154,13 +154,14 @@ contract LazySovereignNFT is
     /**
      * @dev Mint a new token to the specified receiver.
      * @param _receiver The address of the token receiver.
+     * @return uint256 Token Id of the new token.
      */
-    function mintTo(address _receiver) external ifNotDisabled {
+    function mintTo(address _receiver) external ifNotDisabled returns (uint256) {
         require(
             msg.sender == owner() || minterAddresses[msg.sender],
             "lazyMint::only owner or approved minter can mint"
         );
-        _createToken(
+        return _createToken(
             _receiver,
             getDefaultRoyaltyPercentage(),
             getDefaultRoyaltyReceiver()
