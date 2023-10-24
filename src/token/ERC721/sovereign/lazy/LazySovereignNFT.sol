@@ -234,9 +234,20 @@ contract LazySovereignNFT is
     // Read Functions
     /////////////////////////////////////////////////////////////////////////////
     /**
+     * @dev Checks if the supplied address is approved for minting
+     * @param _address The address of the minter.
+     * @return bool, whether the address is approved for minting.
+     */
+    function isApprovedMinter(
+        address _address
+    ) public view  returns (bool) {
+        return minterAddresses[_address];
+    }
+
+    /**
      * @dev Get the address of the token creator for a given token ID.
      * @param _tokenId The ID of the token.
-     * @return The address of the token creator.
+     * @return address of the token creator.
      */
     function tokenCreator(
         uint256 _tokenId
@@ -246,15 +257,14 @@ contract LazySovereignNFT is
 
     /**
      * @dev Get the current minting configuration.
-     * @return numberOfTokens The number of tokens in the current minting batch.
-     * @return baseURI The base URI for token metadata.
+     * @return mintConfig the mint config.
      */
     function getMintConfig()
         public
         view
-        returns (uint256 numberOfTokens, string memory baseURI)
+        returns (MintConfig memory)
     {
-        return (mintConfig.numberOfTokens, mintConfig.baseURI);
+        return mintConfig;
     }
 
     /**
