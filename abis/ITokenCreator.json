@@ -74,16 +74,16 @@
     },
     "settings": {
       "remappings": [
-        ":aux/=lib/aux/",
-        ":ds-test/=lib/ds-test/src/",
-        ":erc4626-tests/=lib/aux/lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/",
-        ":forge-std/=lib/forge-std/src/",
-        ":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
-        ":openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/",
-        ":openzeppelin/=lib/aux/lib/openzeppelin-contracts-upgradeable/contracts/",
-        ":rareprotocol/aux/=lib/aux/src/",
-        ":royalty-guard/=lib/royalty-guard/src/royalty-guard/",
-        ":solmate/=lib/royalty-guard/lib/solmate/src/"
+        "aux/=lib/aux/",
+        "ds-test/=lib/ds-test/src/",
+        "erc4626-tests/=lib/aux/lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/",
+        "forge-std/=lib/forge-std/src/",
+        "openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/",
+        "openzeppelin/=lib/aux/lib/openzeppelin-contracts-upgradeable/contracts/",
+        "rareprotocol/aux/=lib/aux/src/",
+        "royalty-guard/=lib/royalty-guard/src/royalty-guard/",
+        "solmate/=lib/royalty-guard/lib/solmate/src/"
       ],
       "optimizer": {
         "enabled": true,
@@ -111,27 +111,34 @@
   },
   "ast": {
     "absolutePath": "src/token/extensions/ITokenCreator.sol",
-    "id": 10420,
+    "id": 10692,
     "exportedSymbols": {
-      "ITokenCreator": [10419]
+      "ITokenCreator": [
+        10691
+      ]
     },
     "nodeType": "SourceUnit",
     "src": "32:224:56",
     "nodes": [
       {
-        "id": 10411,
+        "id": 10683,
         "nodeType": "PragmaDirective",
         "src": "32:23:56",
         "nodes": [],
-        "literals": ["solidity", "^", "0.8", ".0"]
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ]
       },
       {
-        "id": 10419,
+        "id": 10691,
         "nodeType": "ContractDefinition",
         "src": "57:198:56",
         "nodes": [
           {
-            "id": 10418,
+            "id": 10690,
             "nodeType": "FunctionDefinition",
             "src": "149:104:56",
             "nodes": [],
@@ -142,17 +149,17 @@
             "name": "tokenCreator",
             "nameLocation": "158:12:56",
             "parameters": {
-              "id": 10414,
+              "id": 10686,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10413,
+                  "id": 10685,
                   "mutability": "mutable",
                   "name": "_tokenId",
                   "nameLocation": "179:8:56",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10418,
+                  "scope": 10690,
                   "src": "171:16:56",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -161,7 +168,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 10412,
+                    "id": 10684,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "171:7:56",
@@ -176,17 +183,17 @@
               "src": "170:18:56"
             },
             "returnParameters": {
-              "id": 10417,
+              "id": 10689,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10416,
+                  "id": 10688,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10418,
+                  "scope": 10690,
                   "src": "236:15:56",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -195,7 +202,7 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 10415,
+                    "id": 10687,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "236:15:56",
@@ -210,7 +217,7 @@
               ],
               "src": "235:17:56"
             },
-            "scope": 10419,
+            "scope": 10691,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -222,10 +229,12 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "linearizedBaseContracts": [10419],
+        "linearizedBaseContracts": [
+          10691
+        ],
         "name": "ITokenCreator",
         "nameLocation": "67:13:56",
-        "scope": 10420,
+        "scope": 10692,
         "usedErrors": []
       }
     ],

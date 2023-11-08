@@ -124,6 +124,19 @@ contract LazySovereignNFT is
     /////////////////////////////////////////////////////////////////////////////
     // Write Functions
     /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @dev Set a minter for the contract
+     * @param _minter address of the minter.
+     * @param _isMinter bool of whether the address is a minter.
+     */
+    function setMinterApproval(
+        address _minter,
+        bool _isMinter
+    ) public onlyOwner ifNotDisabled {
+        minterAddresses[_minter] = _isMinter;
+    }
+
     /**
      * @dev Prepare a minting batch with a specified base URI and number of tokens.
      * @param _baseURI The base URI for token metadata.
