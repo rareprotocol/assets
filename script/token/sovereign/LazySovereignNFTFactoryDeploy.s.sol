@@ -3,17 +3,16 @@ pragma solidity ^0.8.0;
 
 import "forge-std/Script.sol";
 
-import "../../../src/token/ERC721/sovereign/SovereignNFTContractFactory.sol";
+import "../../../src/token/ERC721/sovereign/lazy/LazySovereignNFTFactory.sol";
 
-contract SovereignNFTFactoryDeploy is Script {
+contract LazySovereignNFTFactoryDeploy is Script {
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        address martketplaceSetings = vm.envAddress("MARKETPLACE_SETTINGS");
 
         vm.startBroadcast(deployerPrivateKey);
 
         // Deploy Logic Contracts
-        new SovereignNFTContractFactory(martketplaceSetings);
+        new LazySovereignNFTFactory();
 
         vm.stopBroadcast();
     }

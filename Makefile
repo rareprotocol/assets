@@ -7,7 +7,7 @@ clean: ## clean.
 
 build: ## Build the smart contracts with foundry.
 	@bash -l -c 'forge build'
-	scripts/copy_abis.sh
+	script/copy_abis.sh
 
 test: ## Run foundry unit tests.
 	@bash -l -c 'forge test'
