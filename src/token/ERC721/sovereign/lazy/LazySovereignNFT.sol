@@ -58,6 +58,9 @@ contract LazySovereignNFT is
     // Mapping from addresses that can mint outside of the owner
     mapping(address => bool) private minterAddresses;
 
+    // Optional mapping for token URIs
+    mapping(uint256 => string) private _tokenURIs;
+
     // Counter to keep track of the current token id.
     CountersUpgradeable.Counter private tokenIdCounter;
 
@@ -78,6 +81,9 @@ contract LazySovereignNFT is
 
     // Emits when metadata is updated.
     event MetadataUpdated(string baseURI);
+
+    // Emits when token URI is updated.
+    event TokenURIUpdated(uint256 indexed tokenId, string metadataUri);
 
     /////////////////////////////////////////////////////////////////////////////
     // Init
@@ -169,16 +175,19 @@ contract LazySovereignNFT is
      * @param _receiver The address of the token receiver.
      * @return uint256 Token Id of the new token.
      */
-    function mintTo(address _receiver) external ifNotDisabled returns (uint256) {
+    function mintTo(
+        address _receiver
+    ) external ifNotDisabled returns (uint256) {
         require(
             msg.sender == owner() || minterAddresses[msg.sender],
             "lazyMint::only owner or approved minter can mint"
         );
-        return _createToken(
-            _receiver,
-            getDefaultRoyaltyPercentage(),
-            getDefaultRoyaltyReceiver()
-        );
+        return
+            _createToken(
+                _receiver,
+                getDefaultRoyaltyPercentage(),
+                getDefaultRoyaltyReceiver()
+            );
     }
 
     /**
@@ -236,6 +245,23 @@ contract LazySovereignNFT is
     }
 
     /**
+     * @dev Update the token metadata URI.
+     * @param _metadataUri The new metadata URI.
+     */
+    function updateTokenURI(
+        uint256 _tokenId,
+        string calldata _metadataUri
+    ) external onlyOwner {
+        require(
+            !mintConfig.lockedMetadata,
+            "updateTokenURI::metadata is locked"
+        );
+
+        _tokenURIs[_tokenId] = _metadataUri;
+        emit TokenURIUpdated(_tokenId, _metadataUri);
+    }
+
+    /**
      * @dev Lock the metadata to prevent  further updates.
      */
     function lockBaseURI() external onlyOwner {
@@ -251,9 +277,7 @@ contract LazySovereignNFT is
      * @param _address The address of the minter.
      * @return bool, whether the address is approved for minting.
      */
-    function isApprovedMinter(
-        address _address
-    ) public view  returns (bool) {
+    function isApprovedMinter(address _address) public view returns (bool) {
         return minterAddresses[_address];
     }
 
@@ -272,22 +296,23 @@ contract LazySovereignNFT is
      * @dev Get the current minting configuration.
      * @return mintConfig the mint config.
      */
-    function getMintConfig()
-        public
-        view
-        returns (MintConfig memory)
-    {
+    function getMintConfig() public view returns (MintConfig memory) {
         return mintConfig;
     }
 
     /**
-     * @dev Get the token URI for a specific token.
+     * @dev Get the token URI for a specific token. If a token has a set URI,
+     * it will return that, otherwise it will return the token URI computed from
+     * the base URI.
      * @param _tokenId The ID of the token.
      * @return The token's URI.
      */
     function tokenURI(
         uint256 _tokenId
     ) public view virtual override returns (string memory) {
+        if (bytes(_tokenURIs[_tokenId]).length > 0) {
+            return _tokenURIs[_tokenId];
+        }
         return
             string(
                 abi.encodePacked(
